@@ -17,6 +17,7 @@ ChatBot::ChatBot()
     _rootNode = nullptr;
 }
 
+
 // constructor WITH memory allocation
 ChatBot::ChatBot(std::string filename)
 {
@@ -27,23 +28,70 @@ ChatBot::ChatBot(std::string filename)
     _rootNode = nullptr;
 
     // load image into heap memory
-    _image = new wxBitmap(filename, wxBITMAP_TYPE_PNG);
+    // TASK 2: rule of 5
+    _image = std::make_shared<wxBitmap>(filename, wxBITMAP_TYPE_PNG);
 }
 
 ChatBot::~ChatBot()
 {
     std::cout << "ChatBot Destructor" << std::endl;
-
-    // deallocate heap memory
-    if(_image != NULL) // Attention: wxWidgets used NULL and not nullptr
-    {
-        delete _image;
-        _image = NULL;
-    }
 }
 
 //// STUDENT CODE
 ////
+
+// TASK 2: copy constructor
+ChatBot::ChatBot(ChatBot& chatbot)
+{
+    std::cout << "ChatBot Copy Constructor" << std::endl;
+    if (this != &chatbot) {  // Check for self-assignment
+        _image = chatbot._image;
+
+        _chatLogic = chatbot._chatLogic;
+        _chatLogic->SetChatbotHandle(this);
+        _currentNode = chatbot._currentNode;
+        _rootNode = chatbot._rootNode;
+  }
+
+}
+
+ChatBot::ChatBot(ChatBot&& chatbot)
+{
+  std::cout << "ChatBot move constructor" << std::endl;
+  if (this != &chatbot) {
+    _image = std::move(chatbot._image);
+    _chatLogic = chatbot._chatLogic;
+    _chatLogic->SetChatbotHandle(this);
+    _currentNode = chatbot._currentNode;
+    _rootNode = chatbot._rootNode;
+  }
+}
+
+
+ChatBot& ChatBot::operator=(const ChatBot& chatbot) {
+    std::cout << "ChatBot Copy Assignment Operator" << std::endl;
+    if (this != &chatbot) {  // Check for self-assignment
+        _image = chatbot._image;
+        _chatLogic = chatbot._chatLogic;
+        _chatLogic->SetChatbotHandle(this);
+        _currentNode = chatbot._currentNode;
+        _rootNode = chatbot._rootNode;
+    }
+    return *this;
+}
+
+ChatBot& ChatBot::operator=(ChatBot&& chatbot) {
+    std::cout << "ChatBot move assignment operator" << std::endl;
+    if (this != &chatbot) {
+        _image = std::move(chatbot._image);
+        _chatLogic = chatbot._chatLogic;
+        _chatLogic->SetChatbotHandle(this);
+        _currentNode = chatbot._currentNode;
+        _rootNode = chatbot._rootNode;
+  }
+  return *this;
+}
+
 
 ////
 //// EOF STUDENT CODE

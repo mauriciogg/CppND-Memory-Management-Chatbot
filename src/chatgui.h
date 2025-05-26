@@ -31,7 +31,6 @@ public:
     // getter / setter
     ChatLogic *GetChatLogicHandle() {
 
-    std::unique_ptr<ChatLogic> _chatLogic;
       // TASK 1: give ChatBotPanelDialog exlusive ownership of _chatLogic
       // So much for exlusive ownership, but this should be ok since the only callers of
       // this function live inside chatgui.
